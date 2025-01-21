@@ -1,0 +1,21 @@
+[tool.ruff]
+line-length = 119
+src = ["src"]
+exclude = ["migrations"]
+target-version = "py311"
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "N", "A", "COM", "C4", "DJ", "PIE", "T20", "Q", "RSE",
+"RET", "SIM", "PL", "RUF"]
+
+ignore = ["W191", "RUF012", "RUF001", "RUF002", "RUF003", "PLR0911", "PLR0912"]
+
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+multiline-quotes = "single"

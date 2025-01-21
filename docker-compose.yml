@@ -1,0 +1,31 @@
+services:
+  postgres_tjc:
+    image: postgres:13.7-alpine3.15
+    restart: always
+    container_name: postgres_tjc
+    environment:
+      POSTGRES_DB: ${PG_DATABASE}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASS}
+      PGPORT: ${PG_PORT}
+    volumes:
+      - "./db_data:/var/lib/postgresql/data"
+    ports:
+      - "${PG_PORT}:${PG_PORT}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${PG_USER}"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+
+  liquibase_pg:
+    container_name: pg_updater
+    image: liquibase/liquibase
+    volumes:
+      - ./liquibase:/liquibase/changelog
+    command: ['liquibase', '--url=jdbc:postgresql://postgres_tjc:${PG_PORT}/${PG_DATABASE}',
+              '--changeLogFile=./changelog/changelog.xml', '--username=${PG_USER}',
+              '--password=${PG_PASS}', 'update']
+    depends_on:
+      postgres_tjc:
+        condition: service_healthy
