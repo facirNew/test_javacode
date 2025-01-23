@@ -4,12 +4,14 @@
 
 ## Описание задания
 
-  [Задание](https://link)
+  [Задание](https://github.com/facirNew/test_javacode/blob/main/spec.pdf)
+  
   Проект содержит приложение, которое принимает два запроса:
    - POST api/v1/wallets/{WALLET_UUID}/operation - изменение баланса кошелька в базе данных
    - GET api/v1/wallets/{WALLET_UUID} - получение баланса кошелька
 
   В базу данных добавлен кошелек с uuid `df5f771f-89d5-4bc3-9446-723e2747e848`
+  
   Все эндпоинты представлены в Swagger по адресу `/api/docs`
 
   ## Выполнение задания
