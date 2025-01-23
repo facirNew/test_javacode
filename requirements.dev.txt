@@ -9,3 +9,4 @@ gunicorn==23.0.0
 pytest==8.3.4
 loguru==0.7.3
 ruff==0.5.7
+httpx==0.28.1
