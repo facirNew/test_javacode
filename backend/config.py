@@ -4,12 +4,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Environment variables load"""
 
-    PG_DATABASE: str = None
-    PG_USER: str = None
-    PG_PASS: str = None
-    PG_HOST: str = None
-    PG_PORT: str = None
-    REDIS_HOST: str = None
+    PG_DATABASE: str = 'test'
+    PG_USER: str = 'test'
+    PG_PASS: str = 'test'
+    PG_HOST: str = 'localhost'
+    PG_PORT: str = 5432
+    REDIS_HOST: str = 'localhost'
     REDIS_PORT: int = 6379
 
     model_config = SettingsConfigDict(env_file='.env', extra='ignore')
