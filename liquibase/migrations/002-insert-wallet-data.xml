@@ -5,6 +5,10 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
 
-    <include file="migrations/001-create-wallets-table.xml" relativeToChangelogFile="true"/>
-    <include file="migrations/002-insert-wallet-data.xml" relativeToChangelogFile="true"/>
+    <changeSet id="002-insert-wallet-data" author="AlexanderK">
+        <insert tableName="wallets">
+            <column name="uuid" value="df5f771f-89d5-4bc3-9446-723e2747e848" />
+            <column name="balance" value="1000" />
+        </insert>
+    </changeSet>
 </databaseChangeLog>

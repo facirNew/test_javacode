@@ -10,8 +10,8 @@ services:
       PGPORT: ${PG_PORT}
     volumes:
       - "./db_data:/var/lib/postgresql/data"
-    ports:
-      - "${PG_PORT}:${PG_PORT}"
+    expose:
+      - "${PG_PORT}"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${PG_USER}"]
       interval: 10s
@@ -29,3 +29,59 @@ services:
     depends_on:
       postgres_tjc:
         condition: service_healthy
+
+  redis_tjc:
+    image: redis:latest
+    container_name: redis_tjc
+    expose:
+      - "6379"
+    volumes:
+      - ./redis/data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: unless-stopped
+
+  python_backend_0:
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    container_name: python_backend_0
+    restart: always
+    env_file:
+      - .env
+    expose:
+      - "8001"
+    depends_on:
+      - liquibase_pg
+      - redis_tjc
+    command: sh -c "gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.app:app --bind 0.0.0.0:8001 --log-level=error"
+
+  python_backend_1:
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    container_name: python_backend_1
+    restart: always
+    env_file:
+      - .env
+    expose:
+      - "8002"
+    depends_on:
+      - liquibase_pg
+      - redis_tjc
+    command: sh -c "gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.app:app --bind 0.0.0.0:8002 --log-level=error"
+
+  nginx_tjc:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    container_name: nginx_tjc
+    restart: always
+    ports:
+      - "91:91"
+    depends_on:
+      - python_backend_0
+      - python_backend_1
+    links:
+      - python_backend_0
+      - python_backend_1
