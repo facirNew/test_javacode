@@ -19,6 +19,8 @@ async def lifespan(app: FastAPI):
     app.state.redis = redis
     yield
     await redis.aclose()
+
+
 app = FastAPI(title='Wallet', openapi_url='/api/openapi.json', docs_url='/api/docs', lifespan=lifespan)
 
 app.include_router(v1.routers.wallets.router, prefix='/api/v1/wallets')

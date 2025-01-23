@@ -34,11 +34,11 @@ services:
     image: redis:latest
     container_name: redis_tjc
     expose:
-      - "6379"
+      - "${REDIS_PORT}"
     volumes:
       - ./redis/data:/data
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: redis-server /usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf --port ${REDIS_PORT}
     restart: unless-stopped
 
   python_backend_0:
@@ -78,7 +78,7 @@ services:
     container_name: nginx_tjc
     restart: always
     ports:
-      - "91:91"
+      - "${NGINX_PORT}:91"
     depends_on:
       - python_backend_0
       - python_backend_1
