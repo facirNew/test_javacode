@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     PG_USER: str = 'test'
     PG_PASS: str = 'test'
     PG_HOST: str = 'localhost'
-    PG_PORT: str = 5432
+    PG_PORT: str = '5432'
     REDIS_HOST: str = 'localhost'
     REDIS_PORT: int = 6379
 
