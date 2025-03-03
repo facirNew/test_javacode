@@ -15,4 +15,4 @@ class OperationRequest(BaseModel):
     """Model for operation request"""
 
     operationType: Operations  # noqa: N815
-    amount: decimal.Decimal = Field(gt=0)
+    amount: decimal.Decimal = Field(gt=0, decimal_places=2)

@@ -16,7 +16,7 @@ async def test_get_balance_right_wallet(mock_async_session_maker: AsyncMock, moc
     with TestClient(app) as client:
         response = client.get('/api/v1/wallets/123e4567-e89b-12d3-a456-426614174000')
     assert response.status_code == 200
-    assert response.json() == {'uuid': '123e4567-e89b-12d3-a456-426614174000', 'balance': 1000.0}
+    assert response.json() == {'uuid': '123e4567-e89b-12d3-a456-426614174000', 'balance': '1000'}
 
 
 @pytest.mark.asyncio
@@ -50,7 +50,7 @@ async def test_get_balance_right_wallet_cached(mock_async_session_maker: AsyncMo
     with TestClient(app) as client:
         response = client.get('/api/v1/wallets/123e4567-e89b-12d3-a456-426614174000')
     assert response.status_code == 200
-    assert response.json() == {'uuid': '123e4567-e89b-12d3-a456-426614174000', 'balance': 1000.0}
+    assert response.json() == {'uuid': '123e4567-e89b-12d3-a456-426614174000', 'balance': '1000'}
     mock_redis.get.assert_called_with('123e4567-e89b-12d3-a456-426614174000')
 
 
@@ -71,7 +71,7 @@ async def test_wallet_operation_right_wallet_right_json_deposit(
         )
     assert response.status_code == 200
     assert response.json() == {'message': 'Operation succeeded'}
-    mock_redis.set.assert_called_with('123e4567-e89b-12d3-a456-426614174000', 2000.0, ex=3600)
+    mock_redis.set.assert_called_with('123e4567-e89b-12d3-a456-426614174000', '2000', ex=3600)
 
 
 @pytest.mark.asyncio
@@ -91,7 +91,7 @@ async def test_wallet_operation_right_wallet_right_json_withdraw(
         )
     assert response.status_code == 200
     assert response.json() == {'message': 'Operation succeeded'}
-    mock_redis.set.assert_called_with('123e4567-e89b-12d3-a456-426614174000', 0.0, ex=3600)
+    mock_redis.set.assert_called_with('123e4567-e89b-12d3-a456-426614174000', '0', ex=3600)
 
 
 @pytest.mark.asyncio

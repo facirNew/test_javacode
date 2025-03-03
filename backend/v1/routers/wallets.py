@@ -39,7 +39,7 @@ async def wallet_operation(
                 return JSONResponse(status_code=400, content={'message': 'Not enough balance'})
         try:
             await session.commit()
-            await redis.set(wallet_uuid, float(wallet.balance), ex=3600)
+            await redis.set(wallet_uuid, str(wallet.balance), ex=3600)
         except SQLAlchemyError:
             await session.rollback()
             return JSONResponse(status_code=400, content={'message': 'Operation failed'})
@@ -59,7 +59,7 @@ async def get_balance(
 
     cached_balance = await redis.get(wallet_uuid)
     if cached_balance:
-        return JSONResponse({'uuid': wallet_uuid, 'balance': float(cached_balance)})
+        return JSONResponse({'uuid': wallet_uuid, 'balance': str(cached_balance)})
 
     async with session_maker as session:
         query = select(Wallet).where(Wallet.uuid == wallet_uuid)
@@ -67,5 +67,5 @@ async def get_balance(
         wallet = result.scalar_one_or_none()
         if not wallet:
             return JSONResponse(status_code=404, content={'message': 'Wallet not found'})
-    await redis.set(wallet_uuid, float(wallet.balance), ex=3600)
-    return JSONResponse({'uuid': wallet_uuid, 'balance': float(wallet.balance)})
+    await redis.set(wallet_uuid, str(wallet.balance), ex=3600)
+    return JSONResponse({'uuid': wallet_uuid, 'balance': str(wallet.balance)})

@@ -10,7 +10,7 @@
             <column name="uuid" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="balance" type="NUMERIC(15,2)">
+            <column name="balance" type="DECIMAL(15,2)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
